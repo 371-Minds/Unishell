@@ -4,11 +4,12 @@
  */
 
 import { useState } from 'react';
-import { Terminal as TerminalIcon, Server, ShieldCheck, Blocks, Settings, Activity } from 'lucide-react';
+import { Terminal as TerminalIcon, Server, ShieldCheck, Blocks, Settings, Activity, Key } from 'lucide-react';
 import Terminal from './components/Terminal';
 import ServerList from './components/ServerList';
 import AuditLog from './components/AuditLog';
 import Plugins from './components/Plugins';
+import EnvmindsSecrets from './components/EnvmindsSecrets';
 
 export interface ServerConfig {
   id: string;
@@ -20,19 +21,37 @@ export interface ServerConfig {
   uptime: string;
 }
 
+export interface Secret {
+  id: string;
+  key: string;
+  value: string;
+  provider: string;
+  lastRotated: string;
+}
+
 const initialServers: ServerConfig[] = [
   { id: 'prod-web', provider: 'AWS EC2', region: 'us-east-1', status: 'healthy', cpu: '42%', ram: '6.2/16GB', uptime: '45d 12h' },
-  { id: 'dev-db', provider: 'DigitalOcean', region: 'nyc3', status: 'healthy', cpu: '18%', ram: '12.4/32GB', uptime: '12d 4h' },
+  { id: 'local-nas', provider: 'Local (Bare Metal)', region: 'home-lab', status: 'healthy', cpu: '12%', ram: '32/64GB', uptime: '180d 5h' },
+  { id: 'akash-node-1', provider: 'Akash (Decentralized)', region: 'us-west', status: 'healthy', cpu: '28%', ram: '4.1/8GB', uptime: '5d 2h' },
   { id: 'staging-worker', provider: 'GCP Compute', region: 'us-central1', status: 'warning', cpu: '94%', ram: '7.8/8GB', uptime: '2d 1h' }
+];
+
+const initialSecrets: Secret[] = [
+  { id: '1', key: 'AWS_ACCESS_KEY_ID', value: 'AKIA...', provider: 'AWS', lastRotated: '2 days ago' },
+  { id: '2', key: 'AWS_SECRET_ACCESS_KEY', value: '********', provider: 'AWS', lastRotated: '2 days ago' },
+  { id: '3', key: 'AKASH_WALLET_SEED', value: '********', provider: 'Akash', lastRotated: '1 month ago' },
+  { id: '4', key: 'LOCAL_NAS_ROOT_PASS', value: '********', provider: 'Local', lastRotated: '15 days ago' }
 ];
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('terminal');
   const [servers, setServers] = useState<ServerConfig[]>(initialServers);
+  const [secrets, setSecrets] = useState<Secret[]>(initialSecrets);
 
   const tabs = [
     { id: 'terminal', label: 'Universal Shell', icon: TerminalIcon },
     { id: 'servers', label: 'Infrastructure', icon: Server },
+    { id: 'secrets', label: 'Secrets (envminds)', icon: Key },
     { id: 'audit', label: 'Blockchain Audit', icon: ShieldCheck },
     { id: 'plugins', label: 'Agent Skills', icon: Blocks },
   ];
@@ -90,6 +109,7 @@ export default function App() {
         <main className="flex-1 overflow-auto p-6">
           {activeTab === 'terminal' && <Terminal servers={servers} />}
           {activeTab === 'servers' && <ServerList servers={servers} setServers={setServers} />}
+          {activeTab === 'secrets' && <EnvmindsSecrets secrets={secrets} setSecrets={setSecrets} />}
           {activeTab === 'audit' && <AuditLog />}
           {activeTab === 'plugins' && <Plugins />}
         </main>

@@ -5,6 +5,7 @@ InfrastructureOS is a world-class dashboard for managing multi-provider infrastr
 ## Core Features
 
 - **Universal Shell:** A unified terminal interface for executing commands across AWS, GCP, and DigitalOcean without managing individual SSH configurations.
+- **envminds Secrets Management:** Securely manage environment variables and credentials across your hybrid fleet with end-to-end encryption.
 - **Agent Skills (Procedures):** On-demand Python-based skills that agents can load into their context window to perform specialized tasks (e.g., database integrity checks, log analysis).
 - **Context Compaction:** Built-in support for context window optimization, allowing long-running agents to summarize history and maintain performance.
 - **Blockchain Audit Trail:** Every command execution is hashed and logged to a blockchain (simulated Polygon Sepolia) for immutable forensics.

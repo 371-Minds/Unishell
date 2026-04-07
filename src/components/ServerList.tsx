@@ -12,22 +12,32 @@ export default function ServerList({ servers, setServers }: ServerListProps) {
 
   const handleSync = () => {
     setIsSyncing(true);
-    // Simulate fetching from AWS Secrets Manager / HashiCorp Vault / .env
+    // Simulate fetching from AWS Secrets Manager / HashiCorp Vault / .env / Decentralized Registry
     setTimeout(() => {
       setServers(prev => {
-        if (prev.some(s => s.id === 'eu-cache')) return prev;
-        return [
-          ...prev,
+        const newNodes = [
           {
-            id: 'eu-cache',
-            provider: 'Azure VM',
-            region: 'westeurope',
+            id: 'flux-compute-1',
+            provider: 'Flux (Decentralized)',
+            region: 'global-mesh',
             status: 'healthy',
-            cpu: '12%',
-            ram: '4.1/16GB',
-            uptime: '1d 2h'
+            cpu: '5%',
+            ram: '1.2/4GB',
+            uptime: '12h 45m'
+          },
+          {
+            id: 'edge-gateway',
+            provider: 'Local (Raspberry Pi)',
+            region: 'edge-site-a',
+            status: 'healthy',
+            cpu: '15%',
+            ram: '0.8/4GB',
+            uptime: '30d 2h'
           }
         ];
+        
+        const filteredNewNodes = newNodes.filter(newNode => !prev.some(s => s.id === newNode.id));
+        return [...prev, ...filteredNewNodes];
       });
       setIsSyncing(false);
     }, 1500);
