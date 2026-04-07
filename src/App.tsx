@@ -10,14 +10,31 @@ import ServerList from './components/ServerList';
 import AuditLog from './components/AuditLog';
 import Plugins from './components/Plugins';
 
+export interface ServerConfig {
+  id: string;
+  provider: string;
+  region: string;
+  status: string;
+  cpu: string;
+  ram: string;
+  uptime: string;
+}
+
+const initialServers: ServerConfig[] = [
+  { id: 'prod-web', provider: 'AWS EC2', region: 'us-east-1', status: 'healthy', cpu: '42%', ram: '6.2/16GB', uptime: '45d 12h' },
+  { id: 'dev-db', provider: 'DigitalOcean', region: 'nyc3', status: 'healthy', cpu: '18%', ram: '12.4/32GB', uptime: '12d 4h' },
+  { id: 'staging-worker', provider: 'GCP Compute', region: 'us-central1', status: 'warning', cpu: '94%', ram: '7.8/8GB', uptime: '2d 1h' }
+];
+
 export default function App() {
   const [activeTab, setActiveTab] = useState('terminal');
+  const [servers, setServers] = useState<ServerConfig[]>(initialServers);
 
   const tabs = [
     { id: 'terminal', label: 'Universal Shell', icon: TerminalIcon },
     { id: 'servers', label: 'Infrastructure', icon: Server },
     { id: 'audit', label: 'Blockchain Audit', icon: ShieldCheck },
-    { id: 'plugins', label: 'Agent Plugins', icon: Blocks },
+    { id: 'plugins', label: 'Agent Skills', icon: Blocks },
   ];
 
   return (
@@ -71,8 +88,8 @@ export default function App() {
           </h2>
         </header>
         <main className="flex-1 overflow-auto p-6">
-          {activeTab === 'terminal' && <Terminal />}
-          {activeTab === 'servers' && <ServerList />}
+          {activeTab === 'terminal' && <Terminal servers={servers} />}
+          {activeTab === 'servers' && <ServerList servers={servers} setServers={setServers} />}
           {activeTab === 'audit' && <AuditLog />}
           {activeTab === 'plugins' && <Plugins />}
         </main>

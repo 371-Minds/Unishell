@@ -1,46 +1,59 @@
-import { Server, Cloud, HardDrive, Cpu } from 'lucide-react';
+import { Server, Cloud, HardDrive, Cpu, RefreshCw, Key } from 'lucide-react';
+import { useState } from 'react';
+import { ServerConfig } from '../App';
 
-const servers = [
-  {
-    id: 'prod-web',
-    provider: 'AWS EC2',
-    region: 'us-east-1',
-    status: 'healthy',
-    cpu: '42%',
-    ram: '6.2/16GB',
-    uptime: '45d 12h'
-  },
-  {
-    id: 'dev-db',
-    provider: 'DigitalOcean',
-    region: 'nyc3',
-    status: 'healthy',
-    cpu: '18%',
-    ram: '12.4/32GB',
-    uptime: '12d 4h'
-  },
-  {
-    id: 'staging-worker',
-    provider: 'GCP Compute',
-    region: 'us-central1',
-    status: 'warning',
-    cpu: '94%',
-    ram: '7.8/8GB',
-    uptime: '2d 1h'
-  }
-];
+interface ServerListProps {
+  servers: ServerConfig[];
+  setServers: React.Dispatch<React.SetStateAction<ServerConfig[]>>;
+}
 
-export default function ServerList() {
+export default function ServerList({ servers, setServers }: ServerListProps) {
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const handleSync = () => {
+    setIsSyncing(true);
+    // Simulate fetching from AWS Secrets Manager / HashiCorp Vault / .env
+    setTimeout(() => {
+      setServers(prev => {
+        if (prev.some(s => s.id === 'eu-cache')) return prev;
+        return [
+          ...prev,
+          {
+            id: 'eu-cache',
+            provider: 'Azure VM',
+            region: 'westeurope',
+            status: 'healthy',
+            cpu: '12%',
+            ram: '4.1/16GB',
+            uptime: '1d 2h'
+          }
+        ];
+      });
+      setIsSyncing(false);
+    }, 1500);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-medium text-zinc-100">Connected Infrastructure</h3>
-          <p className="text-sm text-zinc-400">Unified via Apache Libcloud abstraction layer</p>
+          <p className="text-sm text-zinc-400">Dynamically loaded via environment & secrets manager</p>
         </div>
-        <button className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-lg transition-colors">
-          Add Provider
-        </button>
+        <div className="flex gap-3">
+          <button 
+            onClick={handleSync}
+            disabled={isSyncing}
+            className="px-4 py-2 bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-zinc-300 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 disabled:opacity-50"
+          >
+            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin' : ''}`} />
+            Sync Config
+          </button>
+          <button className="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white text-sm font-medium rounded-lg transition-colors flex items-center gap-2">
+            <Key className="w-4 h-4" />
+            Manage Secrets
+          </button>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
