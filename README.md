@@ -1,20 +1,26 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# InfrastructureOS: Universal Shell MCP
 
-# Run and deploy your AI Studio app
+InfrastructureOS is a world-class dashboard for managing multi-provider infrastructure through a unified Model Context Protocol (MCP) interface. It leverages **FastMCP**, **Apache Libcloud**, and **Blockchain Auditing** to provide a secure, autonomous, and immutable management layer for AI agents and human administrators.
 
-This contains everything you need to run your app locally.
+## Core Features
 
-View your app in AI Studio: https://ai.studio/apps/8ec84ef3-2b79-4c8f-b981-204a9a9c1542
+- **Universal Shell:** A unified terminal interface for executing commands across AWS, GCP, and DigitalOcean without managing individual SSH configurations.
+- **Agent Skills (Procedures):** On-demand Python-based skills that agents can load into their context window to perform specialized tasks (e.g., database integrity checks, log analysis).
+- **Context Compaction:** Built-in support for context window optimization, allowing long-running agents to summarize history and maintain performance.
+- **Blockchain Audit Trail:** Every command execution is hashed and logged to a blockchain (simulated Polygon Sepolia) for immutable forensics.
+- **Secure Key Vault:** Just-in-time SSH key prompting and secure storage in the MCP vault.
+- **Artifact Handoff:** Dedicated `/mnt/data` boundary for safe handoff of generated artifacts between agent turns.
 
-## Run Locally
+## Tech Stack
 
-**Prerequisites:**  Node.js
+- **Frontend:** React 19, Vite, Tailwind CSS 4.
+- **Icons:** Lucide React.
+- **Animations:** Motion (formerly Framer Motion).
+- **Typography:** Inter (UI) and JetBrains Mono (Terminal/Code).
 
+## Getting Started
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+1. **Infrastructure Tab:** Sync your configuration to load providers from environment variables or secrets managers.
+2. **Universal Shell:** Run commands using the `manage_server(target, cmd)` syntax.
+3. **Skills Tab:** Load specialized procedures into the agent's context window.
+4. **Audit Tab:** Verify the execution history on the immutable ledger.
